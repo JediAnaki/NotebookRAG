@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Конфигурация логирования для NoteBookRAG -->
+
+    <!-- Console Appender - вывод в консоль -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%highlight(%-5level)] [%cyan(%logger{36})] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- File Appender - запись в файл -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/notebookrag.log</file>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger{36}] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- Ротация логов -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/notebookrag-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Логгеры для различных компонентов -->
+
+    <!-- RAG Components -->
+    <logger name="com.notebookrag.ingestion" level="INFO"/>
+    <logger name="com.notebookrag.chunking" level="INFO"/>
+    <logger name="com.notebookrag.embedding" level="INFO"/>
+    <logger name="com.notebookrag.retrieval" level="INFO"/>
+    <logger name="com.notebookrag.generation" level="INFO"/>
+    <logger name="com.notebookrag.storage" level="INFO"/>
+    <logger name="com.notebookrag.cli" level="INFO"/>
+
+    <!-- Внешние библиотеки - уменьшаем уровень логирования -->
+    <logger name="org.apache.pdfbox" level="WARN"/>
+    <logger name="org.apache.poi" level="WARN"/>
+    <logger name="org.apache.http" level="WARN"/>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
