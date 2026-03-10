@@ -39,7 +39,7 @@ build/
 # Application data
 *.ser
 data/
-storage/
+/storage/
 
 # Environment and secrets
 .env
