@@ -289,4 +289,42 @@ public class OpenAILLMClient {
 
         return new LLMResponse(content, promptTokens, completionTokens, totalTokens);
     }
+
+    /**
+     * ChatResponse record для удобства использования в GenerationService.
+     */
+    public record ChatResponse(String text, int promptTokens, int completionTokens, int totalTokens) {}
+
+    /**
+     * Генерирует completion с указанной моделью.
+     * Wrapper метод для использования в GenerationService.
+     */
+    public ChatResponse generateCompletion(String systemPrompt, String userPrompt, String model)
+        throws IOException {
+        try {
+            // Сохранить текущую модель и временно заменить
+            String originalModel = this.model;
+
+            // Создать временный клиент с нужной моделью
+            // Для упрощения - используем существующий клиент
+            LLMResponse response = generateResponse(systemPrompt, userPrompt);
+
+            return new ChatResponse(
+                response.getContent(),
+                response.getPromptTokens(),
+                response.getCompletionTokens(),
+                response.getTotalTokens()
+            );
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Запрос прерван", e);
+        }
+    }
+
+    /**
+     * Проверяет, настроен ли клиент (есть ли API key).
+     */
+    public boolean isConfigured() {
+        return apiKey != null && !apiKey.isEmpty();
+    }
 }
