@@ -39,11 +39,10 @@ import picocli.CommandLine.Option;
         "JDK: ${java.version}"
     },
     subcommands = {
-        // Команды будут добавлены в следующих фазах:
-        // IngestCommand.class,        // Phase 3 (User Story 1)
-        // QueryCommand.class,          // Phase 5 (User Story 3)
-        // InspectCommand.class,        // Phase 4 (User Story 2)
-        // StatsCommand.class           // Phase 7 (Polish)
+        IngestCommand.class,        // Phase 3 (User Story 1) - IMPLEMENTED
+        InspectCommand.class,       // Phase 4 (User Story 2) - IMPLEMENTED
+        QueryCommand.class,         // Phase 5 (User Story 3) - IMPLEMENTED
+        StatsCommand.class          // Phase 7 (Polish) - IMPLEMENTED
     }
 )
 public class NotebookRagCLI implements Runnable {
