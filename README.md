@@ -1,41 +1,84 @@
-# NotebookRAG
+# NoteBookRAG
 
-**Образовательный RAG (Retrieval-Augmented Generation) пайплайн на Java 17+**
+<div align="center">
 
-Полнофункциональное терминальное приложение для изучения концепций RAG, включающее загрузку документов, chunking, векторные эмбеддинги, семантический поиск и генерацию ответов через LLM.
+<!-- Место для GIF/видео демонстрации -->
+<!--
+Замените этот комментарий на ваш GIF или видео:
+![Demo](docs/demo.gif)
+или
+[![Demo Video](docs/thumbnail.png)](https://your-video-link.com)
+-->
 
-## Что такое RAG?
+**Образовательный RAG пайплайн на Java 17+**
 
-RAG (Retrieval-Augmented Generation) - это техника, которая комбинирует:
-1. **Retrieval** (извлечение): поиск релевантной информации из базы знаний
-2. **Augmentation** (дополнение): добавление найденной информации в контекст
-3. **Generation** (генерация): создание ответа через LLM на основе дополненного контекста
+*Терминальное приложение для изучения концепций Retrieval-Augmented Generation*
 
-Это позволяет LLM отвечать на вопросы на основе ваших документов, а не только на основе данных обучения.
+[![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://adoptium.net/)
+[![Maven](https://img.shields.io/badge/Maven-3.9+-blue.svg)](https://maven.apache.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Build](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](target/)
 
-## Особенности проекта
+[Быстрый старт](#быстрый-старт) • [Команды](#команды) • [Примеры](#примеры-использования) • [Документация](#документация)
 
-- **Образовательный фокус**: каждый компонент RAG изолирован и прозрачен
-- **Терминальный интерфейс**: чистое CLI приложение без GUI
-- **Полная наблюдаемость**: видимость каждого этапа пайплайна
-- **Модульная архитектура**: 6 независимых компонентов RAG
-- **Поддержка форматов**: TXT, PDF, DOCX
-- **Детальное логирование**: все операции логируются на русском языке
+</div>
 
-## Быстрый старт
+---
 
-### Предварительные требования
+## 📸 Скриншоты
 
-- **JDK 17+** ([скачать](https://adoptium.net/))
-- **Maven 3.9+** ([скачать](https://maven.apache.org/download.cgi))
-- **OpenAI API key** ([получить](https://platform.openai.com/api-keys))
+<div align="center">
+
+<!-- Место для скриншотов -->
+<!--
+Добавьте 2-3 компактных скриншота:
+<img src="docs/screenshot-ingest.png" width="400" alt="Загрузка документа">
+<img src="docs/screenshot-query.png" width="400" alt="Запрос к системе">
+-->
+
+*Скриншоты будут добавлены после тестирования с реальными данными*
+
+</div>
+
+---
+
+## 🎯 О проекте
+
+**NoteBookRAG** — это образовательное терминальное приложение, созданное для **глубокого понимания RAG (Retrieval-Augmented Generation)** технологии.
+
+### Зачем создан этот проект?
+
+- 📚 **Обучение**: Понять как работает RAG на практике, увидеть каждый этап пайплайна
+- 🔍 **Прозрачность**: Каждый компонент изолирован и доступен для изучения
+- 🛠️ **Эксперименты**: Легко менять параметры (chunk size, top-K, модели) и видеть результаты
+- 💡 **Простота**: Чистая Java без heavyweight фреймворков, понятный код с комментариями на русском
+
+### Что такое RAG?
+
+RAG (Retrieval-Augmented Generation) комбинирует:
+
+1. **Retrieval** (поиск) → Находит релевантную информацию в ваших документах
+2. **Augmentation** (дополнение) → Добавляет найденную информацию в контекст
+3. **Generation** (генерация) → LLM создает ответ на основе ваших данных
+
+Это позволяет AI отвечать на вопросы на основе **ваших документов**, а не только данных обучения.
+
+---
+
+## ⚡ Быстрый старт
+
+### Требования
+
+- Java 17+ ([скачать](https://adoptium.net/))
+- Maven 3.9+ ([скачать](https://maven.apache.org/download.cgi))
+- OpenAI API key ([получить](https://platform.openai.com/api-keys))
 
 ### Установка
 
 ```bash
 # 1. Клонировать репозиторий
-git clone <repository-url>
-cd NoteBookRAG
+git clone https://github.com/JediAnaki/NotebookRAG.git
+cd NotebookRAG
 
 # 2. Установить API ключ
 export OPENAI_API_KEY="sk-your-api-key-here"
@@ -43,27 +86,295 @@ export OPENAI_API_KEY="sk-your-api-key-here"
 # 3. Собрать проект
 mvn clean package
 
-# 4. Создать alias (опционально)
-alias notebook-rag='java -jar target/notebookrag-1.0.0.jar'
+# 4. Готово!
+java -jar target/notebookrag-1.0.0.jar --help
 ```
 
-### Первые шаги
+---
+
+## 📋 Команды
+
+| Команда | Описание | Основные параметры |
+|---------|----------|-------------------|
+| `ingest` | Загрузить и обработать документ (TXT/PDF/DOCX) | `--chunk-size`, `--overlap` |
+| `query` | Задать вопрос и получить AI ответ | `--top-k`, `--verbose`, `--show-sources` |
+| `inspect list-chunks` | Показать список всех чанков документа | - |
+| `inspect inspect-chunk` | Детальная информация о конкретном чанке | `--chunk-id` |
+| `inspect chunk-stats` | Статистика по чанкам (средний размер и т.д.) | - |
+| `inspect show-boundaries` | Визуализация границ чанков | `--limit` |
+| `list-documents` | Список всех загруженных документов | - |
+
+### Детальное описание команд
+
+#### `ingest` - Загрузка документов
+
+Парсит документ, разбивает на чанки, генерирует эмбеддинги и сохраняет в локальное хранилище.
+
+**Параметры:**
+- `<filePath>` - путь к документу (обязательный)
+- `--chunk-size` - размер чанка в символах (по умолчанию: 500)
+- `--overlap` - размер перекрытия между чанками (по умолчанию: 50)
+- `--strategy` - стратегия разбиения: `fixed-size` (по умолчанию)
+- `--verbose` - детальный вывод процесса
+
+#### `query` - Запрос к системе
+
+Находит релевантные чанки и генерирует ответ через LLM.
+
+**Параметры:**
+- `<question>` - ваш вопрос (обязательный)
+- `--top-k` - количество чанков для контекста (по умолчанию: 3)
+- `--model` - LLM модель (по умолчанию: `gpt-4o-mini`)
+- `--show-sources` - показать использованные чанки с similarity scores
+- `--verbose` - детальный вывод всех этапов RAG
+
+#### `inspect` - Инспектирование чанков
+
+Четыре подкоманды для просмотра и анализа чанков:
+- `list-chunks <file>` - список с превью
+- `inspect-chunk <file> --chunk-id N` - детали чанка
+- `chunk-stats <file>` - агрегированная статистика
+- `show-boundaries <file>` - визуализация границ
+
+---
+
+## 💡 Примеры использования
+
+### Пример 1: Базовый сценарий
+
+Загрузите документ и задайте вопрос:
 
 ```bash
-# 1. Загрузить документ
-notebook-rag ingest mydocument.pdf
+# Создайте тестовый файл
+cat > java-basics.txt << 'EOF'
+Java - это объектно-ориентированный язык программирования.
+Интерфейс в Java - это контракт для классов.
+Наследование позволяет одному классу наследовать методы другого.
+Полиморфизм позволяет использовать объекты через общий интерфейс.
+EOF
 
-# 2. Задать вопрос
-notebook-rag query "Что говорится в документе о Java?"
-
-# 3. Посмотреть чанки
-notebook-rag list-chunks mydocument.pdf
-
-# 4. Детальный режим
-notebook-rag query "Что такое интерфейс?" --verbose --show-sources
+# Загрузите документ
+java -jar target/notebookrag-1.0.0.jar ingest java-basics.txt
 ```
 
-## Архитектура RAG пайплайна
+**Вывод:**
+```
+[2026-03-16 10:15:23] [INFO] [DocumentIngestion] - Загрузка документа: java-basics.txt
+[2026-03-16 10:15:23] [INFO] [DocumentIngestion] - Извлечение текста...
+[2026-03-16 10:15:23] [INFO] [ChunkingService] - Разбиение на чанки (размер: 500, перекрытие: 50)
+[2026-03-16 10:15:23] [INFO] [ChunkingService] - Создано чанков: 1
+[2026-03-16 10:15:23] [INFO] [EmbeddingService] - Генерация эмбеддингов для 1 чанков...
+[2026-03-16 10:15:24] [INFO] [EmbeddingService] - Эмбеддинги сгенерированы (модель: text-embedding-3-small, время: 847ms)
+[2026-03-16 10:15:24] [INFO] [SerializationStorage] - Сохранение в: data/vectors/8a3f9c12/
+
+✅ Документ успешно обработан!
+   ID: 8a3f9c12
+   Файл: java-basics.txt
+   Тип: TXT
+   Чанков: 1
+   Время обработки: 1.2 сек
+```
+
+```bash
+# Задайте вопрос
+java -jar target/notebookrag-1.0.0.jar query "Что такое интерфейс в Java?"
+```
+
+**Вывод:**
+```
+[2026-03-16 10:16:05] [INFO] [RetrievalService] - Поиск релевантных чанков (top-K: 3)
+[2026-03-16 10:16:05] [INFO] [RetrievalService] - Найдено чанков: 1
+[2026-03-16 10:16:07] [INFO] [GenerationService] - Генерация ответа (модель: gpt-4o-mini)
+
+Интерфейс в Java - это контракт для классов. Он определяет набор методов,
+которые класс должен реализовать, не предоставляя их конкретной реализации.
+Интерфейсы используются для достижения абстракции и позволяют создавать
+гибкую и расширяемую архитектуру программы.
+```
+
+---
+
+### Пример 2: Verbose режим для обучения
+
+Посмотрите детали каждого этапа RAG:
+
+```bash
+java -jar target/notebookrag-1.0.0.jar query "Что такое полиморфизм?" --verbose --show-sources
+```
+
+**Вывод:**
+```
+════════════════════════════════════════════════════════════════
+                    RAG PIPELINE - ДЕТАЛЬНЫЙ РЕЖИМ
+════════════════════════════════════════════════════════════════
+
+[ЭТАП 1] ГЕНЕРАЦИЯ ЭМБЕДДИНГА ЗАПРОСА
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Запрос: "Что такое полиморфизм?"
+  Модель: text-embedding-3-small
+  Размерность: 1536
+  ⏱ Время: 156 мс
+
+[ЭТАП 2] ПОИСК РЕЛЕВАНТНЫХ ЧАНКОВ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Top-K: 3
+  Всего чанков в хранилище: 1
+  Найдено: 1
+
+  Результаты поиска:
+  ┌─────┬──────────────┬────────────────────────────────────────┐
+  │ Ранг│ Similarity   │ Chunk ID                               │
+  ├─────┼──────────────┼────────────────────────────────────────┤
+  │  1  │   0.887      │ chunk-8a3f9c12-001                     │
+  └─────┴──────────────┴────────────────────────────────────────┘
+
+[ЭТАП 3] ГЕНЕРАЦИЯ ОТВЕТА
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Модель: gpt-4o-mini
+  Контекст: 1 чанк
+  📝 Промпт (токены): 892
+  💬 Ответ (токены): 143
+  📊 Всего токенов: 1035
+  ⏱ Время: 2.3 сек
+
+════════════════════════════════════════════════════════════════
+                            ОТВЕТ
+════════════════════════════════════════════════════════════════
+
+Полиморфизм позволяет использовать объекты разных классов через
+общий интерфейс. Это один из фундаментальных принципов объектно-
+ориентированного программирования, который обеспечивает гибкость
+и расширяемость кода.
+
+════════════════════════════════════════════════════════════════
+                        ИСТОЧНИКИ
+════════════════════════════════════════════════════════════════
+
+[Chunk #1] (similarity: 0.887)
+─────────────────────────────────────────────────────────────
+Java - это объектно-ориентированный язык программирования.
+Интерфейс в Java - это контракт для классов.
+Наследование позволяет одному классу наследовать методы другого.
+Полиморфизм позволяет использовать объекты через общий интерфейс.
+─────────────────────────────────────────────────────────────
+```
+
+---
+
+### Пример 3: Инспектирование чанков
+
+Посмотрите как документ был разбит:
+
+```bash
+java -jar target/notebookrag-1.0.0.jar inspect list-chunks java-basics.txt
+```
+
+**Вывод:**
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║  Документ: java-basics.txt                                           ║
+║  ID: 8a3f9c12                                                         ║
+║  Всего чанков: 1                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+┌──────┬─────────┬────────────┬──────────────────────────────────────────┐
+│ ID   │ Размер  │ Позиция    │ Превью (первые 60 символов)              │
+├──────┼─────────┼────────────┼──────────────────────────────────────────┤
+│  1   │  226    │ 0-226      │ Java - это объектно-ориентированный язык...│
+└──────┴─────────┴────────────┴──────────────────────────────────────────┘
+
+[1 чанк показан]
+```
+
+```bash
+java -jar target/notebookrag-1.0.0.jar inspect chunk-stats java-basics.txt
+```
+
+**Вывод:**
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║              СТАТИСТИКА ЧАНКОВ: java-basics.txt                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+  📊 Всего чанков:           1
+  📏 Средний размер:          226 символов
+  🔗 Размер перекрытия:       50 символов (22%)
+  ⚙️  Стратегия:              FIXED_SIZE
+
+  📈 Распределение по размеру:
+  ├─ Минимум:  226 символов
+  ├─ Максимум: 226 символов
+  └─ Медиана:  226 символов
+```
+
+---
+
+### Пример 4: Работа с PDF документами
+
+```bash
+# Загрузить PDF с настройками chunking
+java -jar target/notebookrag-1.0.0.jar ingest tutorial.pdf \
+  --chunk-size 600 \
+  --overlap 100 \
+  --verbose
+
+# Посмотреть границы чанков
+java -jar target/notebookrag-1.0.0.jar inspect show-boundaries tutorial.pdf --limit 3
+```
+
+**Вывод границ:**
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║            ВИЗУАЛИЗАЦИЯ ГРАНИЦ ЧАНКОВ: tutorial.pdf                  ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+[CHUNK 1] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Java - объектно-ориентированный язык программирования, разработанный
+Sun Microsystems в 1995 году. Основная концепция Java - "Write Once,
+Run Anywhere" (WORA)...
+[OVERLAP] ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[CHUNK 2] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+...Run Anywhere" (WORA). Это означает возможность запуска программы
+на любой платформе без перекомпиляции. Java использует виртуальную
+машину (JVM) для выполнения программ...
+[OVERLAP] ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[CHUNK 3] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+...виртуальную машину (JVM) для выполнения программ. JVM интерпретирует
+байт-код и выполняет его на конкретной платформе...
+
+[Показано 3 чанка из 42]
+```
+
+---
+
+### Пример 5: Список загруженных документов
+
+```bash
+java -jar target/notebookrag-1.0.0.jar list-documents
+```
+
+**Вывод:**
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║                    ЗАГРУЖЕННЫЕ ДОКУМЕНТЫ                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+┌──────────┬───────────────────┬──────┬─────────┬────────┬────────────┐
+│ ID       │ Файл              │ Тип  │ Размер  │ Чанков │ Дата       │
+├──────────┼───────────────────┼──────┼─────────┼────────┼────────────┤
+│ 8a3f9c12 │ java-basics.txt   │ TXT  │ 226 B   │ 1      │ 2026-03-16 │
+│ b7f2e4a9 │ tutorial.pdf      │ PDF  │ 2.3 MB  │ 42     │ 2026-03-15 │
+│ c9d1a5f3 │ guide.docx        │ DOCX │ 850 KB  │ 18     │ 2026-03-14 │
+└──────────┴───────────────────┴──────┴─────────┴────────┴────────────┘
+
+[3 документа в системе]
+```
+
+---
+
+## 🏗️ Архитектура
 
 ```
 ┌──────────────┐
@@ -75,14 +386,14 @@ notebook-rag query "Что такое интерфейс?" --verbose --show-sour
 │  Text        │
 └──────┬───────┘
        │
-       ↓ 2. Chunking (фиксированный размер + overlap)
+       ↓ 2. Chunking (fixed-size + overlap)
 ┌──────────────┐
-│  Chunks[]    │  ["chunk1", "chunk2", ...]
+│  Chunks[]    │
 └──────┬───────┘
        │
        ↓ 3. Embedding (OpenAI API)
 ┌──────────────┐
-│  Vectors[]   │  [float[1536], float[1536], ...]
+│  Vectors[]   │  [1536 dimensions]
 └──────┬───────┘
        │
        ↓ 4. Storage (.ser files)
@@ -90,503 +401,171 @@ notebook-rag query "Что такое интерфейс?" --verbose --show-sour
 │  Disk        │
 └──────────────┘
 
-User Query → Embed → Similarity Search (cosine) → Top-K Chunks → LLM → Answer
+User Query → Embed → Cosine Similarity → Top-K → LLM → Answer
 ```
 
-## Основные команды
+### 6 Изолированных Компонентов
 
-### Загрузка документов (ingest)
+1. **Ingestion** - Парсинг TXT/PDF/DOCX
+2. **Chunking** - Разбиение фиксированного размера
+3. **Embedding** - OpenAI text-embedding-3-small
+4. **Storage** - Java сериализация
+5. **Retrieval** - Косинусное сходство, top-K
+6. **Generation** - OpenAI gpt-4o-mini
+
+---
+
+## 🔧 Конфигурация
+
+### Через environment переменные
 
 ```bash
-# Базовое использование
-notebook-rag ingest document.pdf
-
-# С настройками chunking
-notebook-rag ingest document.pdf --chunk-size 600 --overlap 100
-
-# Множественные документы
-notebook-rag ingest doc1.txt doc2.pdf doc3.docx
-```
-
-**Параметры:**
-- `--chunk-size` - размер чанка в символах (по умолчанию: 500)
-- `--overlap` - размер перекрытия в символах (по умолчанию: 50)
-
-### Запрос (query)
-
-```bash
-# Простой запрос
-notebook-rag query "Что такое полиморфизм?"
-
-# С детальным выводом
-notebook-rag query "Объясни наследование" --verbose
-
-# С источниками
-notebook-rag query "Что такое интерфейс?" --show-sources
-
-# Настройка retrieval
-notebook-rag query "Вопрос" --top-k 5 --model gpt-4o
-```
-
-**Параметры:**
-- `--top-k` - количество извлекаемых чанков (по умолчанию: 3)
-- `--model` - LLM модель (по умолчанию: gpt-4o-mini)
-- `--verbose` - детальный вывод всех этапов RAG
-- `--show-sources` - показать использованные чанки
-
-### Инспектирование (inspect)
-
-```bash
-# Список всех чанков документа
-notebook-rag list-chunks document.pdf
-
-# Детальный просмотр конкретного чанка
-notebook-rag inspect-chunks document.pdf --chunk-id 5
-
-# Статистика по чанкам
-notebook-rag chunk-stats document.pdf
-
-# Визуализация границ чанков
-notebook-rag show-boundaries document.pdf --limit 10
-```
-
-### Статистика (stats)
-
-```bash
-# Список всех загруженных документов
-notebook-rag list-documents
-
-# Информация о конкретном документе
-notebook-rag document-info document.pdf
-```
-
-## Компоненты RAG
-
-### 1. Document Ingestion (Загрузка документов)
-
-**Файлы:** `src/main/java/com/notebookrag/ingestion/`
-
-- `DocumentIngestionService.java` - оркестрация загрузки
-- `TextDocumentParser.java` - парсинг TXT
-- `PdfDocumentParser.java` - парсинг PDF (Apache PDFBox)
-- `DocxDocumentParser.java` - парсинг DOCX (Apache POI)
-
-**Концепция:** Извлечение текста из различных форматов документов
-
-### 2. Chunking (Разбиение на чанки)
-
-**Файлы:** `src/main/java/com/notebookrag/chunking/`
-
-- `ChunkingService.java` - сервис разбиения
-- `FixedSizeChunker.java` - фиксированное разбиение с перекрытием
-- `ChunkingStrategy.java` - интерфейс стратегии
-
-**Концепция:** Разбиение текста на фрагменты фиксированного размера с перекрытием для сохранения контекста на границах
-
-**Параметры:**
-- Размер чанка: ~500 символов (настраивается)
-- Перекрытие: ~10% от размера чанка
-
-### 3. Embedding (Векторизация)
-
-**Файлы:** `src/main/java/com/notebookrag/embedding/`
-
-- `EmbeddingService.java` - генерация эмбеддингов
-- `OpenAIEmbeddingClient.java` - HTTP клиент для OpenAI API
-
-**Концепция:** Преобразование текста в векторное представление (float[1536]) для семантического поиска
-
-**Модель:** `text-embedding-3-small` (1536 измерений)
-
-### 4. Vector Storage (Хранение векторов)
-
-**Файлы:** `src/main/java/com/notebookrag/storage/`
-
-- `VectorStorageService.java` - интерфейс хранилища
-- `SerializationStorage.java` - файловое хранилище (.ser файлы)
-
-**Концепция:** Сохранение чанков и их эмбеддингов в файловую систему
-
-**Структура:**
-```
-data/vectors/
-  └── {document-id}/
-      ├── metadata.ser    # Document
-      ├── chunks.ser      # List<Chunk>
-      └── embeddings.ser  # List<Embedding>
-```
-
-### 5. Retrieval (Поиск)
-
-**Файлы:** `src/main/java/com/notebookrag/retrieval/`
-
-- `RetrievalService.java` - поиск релевантных чанков
-- `CosineSimilarity.java` - вычисление косинусного сходства
-
-**Концепция:** Поиск top-K наиболее релевантных чанков через косинусное сходство векторов
-
-**Формула:**
-```
-similarity(A, B) = (A · B) / (||A|| * ||B||)
-```
-
-**Результат:** значение от 0.0 (несхожи) до 1.0 (идентичны)
-
-### 6. Generation (Генерация ответов)
-
-**Файлы:** `src/main/java/com/notebookrag/generation/`
-
-- `GenerationService.java` - генерация ответов
-- `OpenAILLMClient.java` - HTTP клиент для OpenAI Chat API
-
-**Концепция:** Генерация ответа через LLM на основе найденных чанков
-
-**Модель:** `gpt-4o-mini` (баланс качество/цена)
-
-**Промпт структура:**
-```
-System: Ты помощник, отвечающий на вопросы на основе предоставленного контекста.
-
-User: Контекст:
-[Chunk 1 текст]
-[Chunk 2 текст]
-[Chunk 3 текст]
-
-Вопрос: {user query}
-```
-
-## Конфигурация
-
-### Конфигурационный файл
-
-Создайте `~/.notebookrag/config.properties`:
-
-```properties
-# Chunking параметры
-chunking.default.size=500
-chunking.default.overlap=50
-
-# Retrieval параметры
-retrieval.default.topk=3
-
-# OpenAI модели
-openai.embedding.model=text-embedding-3-small
-openai.llm.model=gpt-4o-mini
-
-# Хранилище
-storage.path=./data/vectors
-
-# Логирование
-logging.level=INFO
-logging.file=logs/notebookrag.log
-```
-
-### Environment переменные
-
-```bash
-export OPENAI_API_KEY="sk-..."
+export OPENAI_API_KEY="sk-your-key"
 export NOTEBOOKRAG_STORAGE_PATH="/custom/path"
 export NOTEBOOKRAG_LOG_LEVEL="DEBUG"
 ```
 
-### Приоритет конфигурации
+### Через конфигурационный файл
 
-1. **CLI флаги** (высший приоритет)
-2. **Environment переменные**
-3. **Конфигурационный файл**
-4. **Defaults в коде** (низший приоритет)
+Создайте `~/.notebookrag/config.properties`:
 
-## Примеры использования
+```properties
+# OpenAI
+openai.api.key=sk-your-key-here
+openai.embedding.model=text-embedding-3-small
+openai.llm.model=gpt-4o-mini
 
-### Пример 1: Обработка учебника по Java
+# Chunking defaults
+chunking.default.size=500
+chunking.default.overlap=50
 
-```bash
-# 1. Загрузка документа
-notebook-rag ingest java-tutorial.pdf
+# Retrieval
+retrieval.default.topk=3
 
-# Вывод:
-# Загрузка документа: java-tutorial.pdf
-# Извлечение текста: 100% [====================] (42 страницы)
-# Разбиение на чанки: 127 чанков создано
-# Генерация эмбеддингов: 100% [====================] (127/127)
-# Сохранение: data/vectors/8f3a9c12/
-# Документ успешно обработан
+# Storage
+storage.path=./data/vectors
 
-# 2. Просмотр чанков
-notebook-rag chunk-stats java-tutorial.pdf
-
-# Вывод:
-# Статистика чанков для java-tutorial.pdf:
-# Всего чанков: 127
-# Средний размер: 487 символов
-# Размер overlap: 50 символов
-# Стратегия: FIXED_SIZE
-
-# 3. Запрос
-notebook-rag query "Что такое интерфейс в Java?"
-
-# Вывод:
-# Интерфейс в Java - это контракт, который определяет набор методов,
-# которые класс должен реализовать. Интерфейс не содержит реализации
-# методов (до Java 8), только их сигнатуры...
-
-# 4. Запрос с источниками
-notebook-rag query "Объясни полиморфизм" --show-sources
-
-# Вывод:
-# Полиморфизм в Java позволяет объектам разных классов обрабатываться
-# через общий интерфейс...
-#
-# [Источники]
-# Chunk #42 (similarity: 0.89): "Полиморфизм - это способность объекта..."
-# Chunk #87 (similarity: 0.85): "В Java полиморфизм реализуется через..."
-# Chunk #103 (similarity: 0.82): "Пример полиморфизма: Animal animal = new Dog()..."
+# Logging
+logging.level=INFO
 ```
 
-### Пример 2: Эксперименты с chunking
+### Через CLI флаги (высший приоритет)
 
 ```bash
-# Сравнение различных размеров чанков
-notebook-rag ingest document.txt --chunk-size 300 --overlap 30
-notebook-rag chunk-stats document.txt
+java -jar target/notebookrag-1.0.0.jar ingest doc.pdf \
+  --chunk-size 800 \
+  --overlap 80
 
-notebook-rag ingest document.txt --chunk-size 700 --overlap 70
-notebook-rag chunk-stats document.txt
-
-# Визуализация границ
-notebook-rag show-boundaries document.txt --limit 5
-
-# Вывод показывает как изменилось разбиение
+java -jar target/notebookrag-1.0.0.jar query "вопрос" \
+  --top-k 5 \
+  --model gpt-4o
 ```
 
-### Пример 3: Verbose режим для обучения
+---
 
-```bash
-notebook-rag query "Что такое наследование?" --verbose
+## 📚 Документация
 
-# Вывод:
-# === EMBEDDING QUERY ===
-# Модель: text-embedding-3-small
-# Размерность: 1536
-# Время: 156ms
-#
-# === RETRIEVAL ===
-# Top-K: 3
-# Найдено чанков: 3
-# Chunk #23 - similarity: 0.91
-# Chunk #45 - similarity: 0.87
-# Chunk #12 - similarity: 0.84
-#
-# === GENERATION ===
-# Модель: gpt-4o-mini
-# Промпт: 892 токена
-# Ответ: 143 токена
-# Всего токенов: 1035
-# Время: 2.3 секунды
-#
-# === ОТВЕТ ===
-# Наследование в Java - это механизм...
-```
+### Дополнительные ресурсы
 
-## Производительность
+- [TESTING_REPORT.md](TESTING_REPORT.md) - Результаты тестирования
+- [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - Детали реализации
+- [specs/001-basic-rag-pipeline/](specs/001-basic-rag-pipeline/) - Полная спецификация
 
-### Ожидаемые показатели
+### Технологии
+
+| Компонент | Технология | Версия |
+|-----------|-----------|--------|
+| Язык | Java | 17+ |
+| Build | Maven | 3.9+ |
+| CLI | picocli | 4.7.5 |
+| JSON | Jackson | 2.16.1 |
+| PDF | Apache PDFBox | 3.0.1 |
+| DOCX | Apache POI | 5.2.5 |
+| Logging | SLF4J + Logback | 2.0.11 + 1.4.14 |
+| Embeddings | OpenAI API | text-embedding-3-small |
+| LLM | OpenAI API | gpt-4o-mini |
+
+---
+
+## 🚀 Производительность
 
 | Операция | Время | Примечания |
 |----------|-------|-----------|
-| Парсинг PDF (10 страниц) | < 2 сек | Apache PDFBox |
-| Парсинг DOCX (10 страниц) | < 1 сек | Apache POI |
-| Chunking (5KB текста) | < 100ms | Чистая Java логика |
-| Генерация эмбеддингов (100 чанков) | 5-10 сек | OpenAI API latency |
-| Сериализация | < 500ms | Java serialization |
-| Поиск (1000 чанков) | < 50ms | In-memory вычисления |
-| LLM генерация | 2-5 сек | Зависит от длины ответа |
+| PDF парсинг (10 стр) | < 2 сек | Apache PDFBox |
+| DOCX парсинг (10 стр) | < 1 сек | Apache POI |
+| Chunking (5KB) | < 100 мс | Pure Java |
+| Embeddings (100 чанков) | 5-10 сек | OpenAI API |
+| Поиск (1000 чанков) | < 50 мс | In-memory |
+| LLM генерация | 2-5 сек | gpt-4o-mini |
 
-### Ограничения
+**Документ 10MB**: < 2 минуты полная обработка
 
-- Максимальный размер документа: **50MB** (настраивается)
-- Максимальное количество чанков: **10,000**
-- OpenAI rate limits: 3000 RPM (embeddings), 500 RPM (chat)
+---
 
-### Оптимизация памяти
+## 🛠️ Troubleshooting
 
-Для больших документов:
-```bash
-java -Xmx4g -jar target/notebookrag-1.0.0.jar ingest large-document.pdf
-```
+### API key не найден
 
-## Troubleshooting
-
-### OpenAI API ключ не найден
-
-**Проблема:**
-```
-ОШИБКА: OpenAI API key не найден
-```
-
-**Решение:**
 ```bash
 export OPENAI_API_KEY="sk-your-key-here"
-
-# Для постоянного использования добавьте в ~/.bashrc или ~/.zshrc:
-echo 'export OPENAI_API_KEY="sk-your-key-here"' >> ~/.bashrc
-source ~/.bashrc
+# или добавьте в ~/.bashrc для постоянного использования
 ```
-
-### Rate limit exceeded
-
-**Проблема:**
-```
-ОШИБКА: OpenAI API вернул ошибку 429 (rate limit exceeded)
-```
-
-**Решение:**
-- Приложение автоматически выполняет retry с exponential backoff
-- Подождите несколько минут между запросами
-- Уменьшите chunk size для меньшего количества API вызовов
 
 ### Out of memory
 
-**Проблема:**
-```
-java.lang.OutOfMemoryError: Java heap space
-```
-
-**Решение:**
 ```bash
 # Увеличьте heap size
-java -Xmx4g -jar target/notebookrag-1.0.0.jar ingest large-doc.pdf
+java -Xmx4g -jar target/notebookrag-1.0.0.jar ingest large.pdf
 ```
 
 ### Corrupted PDF
 
-**Проблема:**
-```
-ОШИБКА: Не удалось извлечь текст из PDF
-```
+- Пересохраните через Adobe Reader
+- Конвертируйте в TXT/DOCX
+- Используйте другой PDF файл
 
-**Решение:**
-- Проверьте PDF в другом ридере
-- Пересохраните PDF через Adobe Reader / Preview
-- Конвертируйте в TXT или DOCX формат
+---
 
-## Технологии
+## 🎓 Для чего использовать?
 
-### Зависимости
+### Обучение
 
-- **picocli 4.7+** - CLI framework
-- **Jackson 2.16+** - JSON обработка
-- **Apache PDFBox 3.0+** - парсинг PDF
-- **Apache POI 5.2+** - парсинг DOCX
-- **SLF4J 2.0+ + Logback 1.4+** - логирование
-- **Java 11+ HttpClient** - HTTP клиент для OpenAI API
+- Понять принципы работы RAG
+- Изучить векторные эмбеддинги
+- Экспериментировать с chunking стратегиями
+- Анализировать влияние параметров на качество
 
-### Структура проекта
+### Прототипирование
 
-```
-src/
-└── main/
-    ├── java/com/notebookrag/
-    │   ├── Main.java                      # Точка входа
-    │   ├── cli/                           # CLI команды
-    │   │   ├── NotebookRagCLI.java
-    │   │   ├── IngestCommand.java
-    │   │   ├── QueryCommand.java
-    │   │   ├── InspectCommand.java
-    │   │   └── StatsCommand.java
-    │   ├── domain/                        # Модель данных
-    │   │   ├── Document.java
-    │   │   ├── Chunk.java
-    │   │   ├── Embedding.java
-    │   │   ├── Query.java
-    │   │   ├── RetrievalResult.java
-    │   │   └── GeneratedResponse.java
-    │   ├── ingestion/                     # Загрузка документов
-    │   ├── chunking/                      # Разбиение на чанки
-    │   ├── embedding/                     # Генерация эмбеддингов
-    │   ├── storage/                       # Хранение векторов
-    │   ├── retrieval/                     # Поиск
-    │   ├── generation/                    # Генерация ответов
-    │   ├── config/                        # Конфигурация
-    │   └── utils/                         # Утилиты
-    └── resources/
-        ├── application.properties
-        └── logback.xml
-```
+- Быстро проверить идеи RAG приложений
+- Тестировать различные документы
+- Оценить качество retrieval
+- Подобрать оптимальные параметры
 
-## Обучение и эксперименты
+### База для развития
 
-### Понимание Chunking
+- Phase 2: Semantic chunking, re-ranking
+- Phase 3: Vector DB, conversation memory
+- Phase 4: Web UI, multi-user
 
-```bash
-# Сравните разные размеры чанков
-notebook-rag ingest doc.txt --chunk-size 200 --overlap 20
-notebook-rag show-boundaries doc.txt
+---
 
-notebook-rag ingest doc.txt --chunk-size 800 --overlap 80
-notebook-rag show-boundaries doc.txt
-
-# Наблюдайте как границы влияют на retrieval
-```
-
-### Понимание Embeddings
-
-```bash
-# Посмотрите на эмбеддинги
-notebook-rag inspect-chunks doc.txt --chunk-id 1
-
-# Вы увидите:
-# Первые 5 компонентов вектора: [0.0123, -0.0456, 0.0789, ...]
-# Каждое число - семантическое представление текста
-```
-
-### Понимание Retrieval
-
-```bash
-# Используйте verbose mode
-notebook-rag query "вопрос" --verbose
-
-# Обратите внимание на similarity scores:
-# 0.9-1.0 = очень релевантно
-# 0.7-0.9 = релевантно
-# < 0.7 = слабая релевантность
-```
-
-## Дальнейшее развитие
-
-Этот проект - **Phase 1** (базовый RAG). Возможные улучшения:
-
-### Phase 2: Продвинутый RAG
-- Semantic chunking (разбиение по предложениям)
-- Re-ranking моделей для улучшения retrieval
-- Metadata фильтры (дата, автор, тип)
-- Hybrid search (keyword + semantic)
-
-### Phase 3: Production features
-- Векторная БД (Pinecone, Weaviate, ChromaDB)
-- Multi-query retrieval
-- Память диалога (conversation history)
-- Web интерфейс
-
-## Ресурсы
-
-- [OpenAI Embeddings API](https://platform.openai.com/docs/guides/embeddings)
-- [OpenAI Chat API](https://platform.openai.com/docs/guides/text-generation)
-- [RAG Concepts](https://www.pinecone.io/learn/retrieval-augmented-generation/)
-- [Apache PDFBox](https://pdfbox.apache.org/)
-- [Apache POI](https://poi.apache.org/)
-- [picocli](https://picocli.info/)
-
-## Лицензия
+## 📝 Лицензия
 
 MIT License
 
-## Контрибьюции
+---
+
+## 🤝 Контрибьюции
 
 Проект создан в образовательных целях. Pull requests приветствуются!
 
 ---
 
-**Версия:** 1.0.0
-**Дата:** 2026-03-08
-**Язык:** Java 17+
+<div align="center">
+
+**Сделано с ❤️ для изучения RAG**
+
+[⬆ Наверх](#notebookrag)
+
+</div>
